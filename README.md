@@ -42,14 +42,14 @@ const container = taskDefinition.addContainer('task-definition', {
 	image: ContainerImage.fromEcrRepository(yourEcrRepositoryWithThisImage),
 	memoryLimitMiB: 128,
 	environment: {
-		HTTP_LISTEN_PORT: '9100',
+		HTTP_LISTEN_PORT: '9102',
 		RUST_LOG: 'info,ecs_service_metrics_exporter=debug',
 		DOCKER_LABEL_HAS_METRICS: 'container-exposes-metrics',
 	},
 	portMappings: [
 		{
-			containerPort: '9100',
-			hostPort: '9100',
+			containerPort: '9102',
+			hostPort: '9102',
 			protocol: EcsProtocol.TCP
 		}
 	],
