@@ -25,7 +25,7 @@ RUN mkdir -p /app/for_final_image && \
 	cd /cache && \
 	cargo build --target x86_64-unknown-linux-musl --release && \
 	cp target/x86_64-unknown-linux-musl/release/ecs_service_metrics_exporter /app/for_final_image/ecs_service_metrics_exporter && \
-	cp docker/healthCheckOrDumpStack.sh /app
+	cp docker/healthCheckOrDumpStack.sh /app/for_final_image/healthCheckOrDumpStack.sh
 
 # FINAL IMAGE
 FROM public.ecr.aws/docker/library/ubuntu:20.04
@@ -35,7 +35,9 @@ WORKDIR /app
 HEALTHCHECK --interval=30s --timeout=10s --start-period=3m --retries=5 CMD /app/healthCheckOrDumpStack.sh || exit 1
 CMD ["/app/ecs_service_metrics_exporter"]
 
+# cURL is required for health check, otherwise just remove it
 RUN apt update && \
+	apt -y --no-install-recommends install curl && \
 	rm -rf /var/lib/apt/lists/* && \
 	groupadd -r app -g 1000 && \
 	useradd -u 1000 -r -g app -m -d /app -s /sbin/nologin app && \
